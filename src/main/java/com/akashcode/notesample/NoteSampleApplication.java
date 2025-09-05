@@ -1,0 +1,13 @@
+package com.akashcode.notesample;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class NoteSampleApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(NoteSampleApplication.class, args);
+    }
+
+}
