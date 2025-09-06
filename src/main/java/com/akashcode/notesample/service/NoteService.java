@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class NoteService {
@@ -15,49 +14,35 @@ public class NoteService {
     @Autowired
     private NoteRepository noteRepository;
 
-    // Create Note
     public Note createNote(Note note) {
-        note.setShareUrl(null); // default private
         return noteRepository.save(note);
     }
 
-    // Get All Notes
     public List<Note> getAllNotes() {
         return noteRepository.findAll();
     }
 
-    // Get Note by ID
     public Optional<Note> getNoteById(Long id) {
         return noteRepository.findById(id);
     }
 
-    // Update Note
     public Optional<Note> updateNote(Long id, Note updatedNote) {
         return noteRepository.findById(id).map(note -> {
             note.setTitle(updatedNote.getTitle());
             note.setContent(updatedNote.getContent());
-            return noteRepository.save(note); // updatedAt auto-updated
+            return noteRepository.save(note);
         });
     }
 
-    // Delete Note
     public void deleteNote(Long id) {
         noteRepository.deleteById(id);
     }
 
-    // Share Note (generate UUID once)
-    public Optional<String> shareNote(Long id) {
-        return noteRepository.findById(id).map(note -> {
-            if (note.getShareUrl() == null) {
-                note.setShareUrl(UUID.randomUUID().toString());
-                noteRepository.save(note); // updatedAt auto-updated
-            }
-            return note.getShareUrl();
-        });
-    }
-
-    // Get Note by Share URL
-    public Optional<Note> getNoteByShareUrl(String shareUrl) {
-        return noteRepository.findByShareUrl(shareUrl);
+    public String shareNote(Long id) {
+        Optional<Note> note = noteRepository.findById(id);
+        if (note.isPresent()) {
+            return "http://localhost:3000/notes/share/" + note.get().getShareUrl();
+        }
+        return null; // Return null if note is not found
     }
 }

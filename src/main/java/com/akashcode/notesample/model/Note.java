@@ -2,9 +2,11 @@ package com.akashcode.notesample.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 public class Note {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -12,7 +14,6 @@ public class Note {
     private String title;
     private String content;
     private String shareUrl;
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -20,6 +21,7 @@ public class Note {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.shareUrl = UUID.randomUUID().toString();  // Generate a unique shareable link when the note is created
     }
 
     @PreUpdate
@@ -27,7 +29,7 @@ public class Note {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Getters & Setters
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
